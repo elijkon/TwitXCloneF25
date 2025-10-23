@@ -17,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     Button signupButton;
     Button loginButton;
 
+
     View.OnClickListener loginListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -37,6 +38,17 @@ public class LoginActivity extends AppCompatActivity {
         signupButton = findViewById(R.id.signup_button);
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(loginListener);
+
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

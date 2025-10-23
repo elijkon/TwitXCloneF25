@@ -22,9 +22,11 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
+
         usernameText = findViewById(R.id.user_field);
         passwordText = findViewById(R.id.pass_field);
         dobText = findViewById(R.id.dob_field);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
