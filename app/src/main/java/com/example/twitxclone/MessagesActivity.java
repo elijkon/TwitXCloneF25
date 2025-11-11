@@ -2,12 +2,15 @@ package com.example.twitxclone;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,10 +18,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.twitxclone.model.Message;
 import com.example.twitxclone.model.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -69,8 +77,30 @@ public class MessagesActivity extends AppCompatActivity {
         userTextView = findViewById(R.id.username);
         TextView dobTextView = findViewById(R.id.dob);
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new MessageAdapter(this, messageList);
+//        adapter = new MessageAdapter(this, messageList);
+        ArrayAdapter adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, messageList);
         listView.setAdapter(adapter);
+
+        DatabaseReference refUsers = database.getReference("messages");
+        refUsers.orderByChild("publishedAt").limitToLast(100).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                messageList.clear();
+                for(DataSnapshot current: snapshot.getChildren()) {
+                    Message m = current.getValue(Message.class);
+                    messageList.add(m);
+                }
+                Log.i("list", messageList.toString());
+                Collections.reverse(messageList);
+                listView.invalidateViews();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         userTextView.setText(email);
         dobTextView.setText(dob);

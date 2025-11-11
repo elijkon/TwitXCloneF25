@@ -28,4 +28,9 @@ public class Message {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return message + "by " + author + ", publishedAt=" + publishedAt;
+    }
 }
